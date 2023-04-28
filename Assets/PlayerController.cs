@@ -79,4 +79,16 @@ public class PlayerController : MonoBehaviour
         
         //Time.timeScale = 0;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+
+            hp--;
+            if (hp <= 0) Die();
+            hpScrollBar.size = hp / 10;
+            Vector3 pushVector = other.gameObject.transform.position - transform.position;
+            other.gameObject.GetComponent<Rigidbody>().AddForce(pushVector.normalized * 5, ForceMode.Impulse);
+        }
+    }
 }
