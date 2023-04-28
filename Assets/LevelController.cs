@@ -4,6 +4,8 @@ using UnityEngine;
 public class LevelController : MonoBehaviour
 {
     public GameObject Zombie;
+    public GameObject Heal;
+    public int MaxHealCount;
     public int MaxZombieCount;
 
 
@@ -17,6 +19,8 @@ public class LevelController : MonoBehaviour
     void Update()
     {
         SpawnZombie();
+        SpawnHeal();
+
     }
 
     private void SpawnZombie()
@@ -25,7 +29,9 @@ public class LevelController : MonoBehaviour
 
         if (currentZombieCount.Count() < MaxZombieCount)
         {
-            var position = GetRandomPosition();
+            
+            var position = GetRandomPosition(0);
+
 
             if (Physics.CheckSphere(position, 5))
             {
@@ -34,12 +40,26 @@ public class LevelController : MonoBehaviour
         }
     }
 
-    private Vector3 GetRandomPosition()
+    private void SpawnHeal()
     {
-        var x = Random.Range(-10f, 10f);
-        var z = Random.Range(-10f, 10f);
-        var position = new Vector3(x, 0f, z);
+        var currentHealCount = GameObject.FindGameObjectsWithTag("Heal");
 
+        if (currentHealCount.Count() < MaxHealCount)
+        {
+            var position = GetRandomPosition(1);
+
+            if (Physics.CheckSphere(position, 5))
+            {
+                Instantiate(Heal, position, Quaternion.identity);
+            }
+        }
+    }
+
+    private Vector3 GetRandomPosition(int y)
+    {
+        var x = Random.Range(-10, 10);
+        var z = Random.Range(-10, 10);
+        var position = new Vector3(x, y, z);
         return position;
     }
 }
